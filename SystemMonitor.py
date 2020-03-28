@@ -1,6 +1,5 @@
 import psutil
-
-print("hello world")
+from influxdb import InfluxDBClient
 
 # cpu
 cpu_load = psutil.cpu_percent()
@@ -19,3 +18,19 @@ dsk_total = round(psutil.disk_usage('/').free / 1024.0 / 1024.0 / 1024.0, 1)
 print("CPU load: " + str(cpu_load) + "%")
 print("Memory: " + str(mem_free) + "Mb / " + str(mem_total) + "Mb")
 print("Disk: " + str(dsk_free) + "Gb / " + str(dsk_total) + "Gb")
+
+json_body = [{"measurement": "system",
+              "fields": {
+                  "cpu_load": cpu_load,
+                  "mem_total": mem_total,
+                  "mem_free": mem_free,
+                  "mem_used": (mem_total - mem_free),
+                  "dsk_total": dsk_total,
+                  "dsk_free": dsk_free,
+                  "dsk_used": (dsk_total - dsk_free)
+                  }
+              }]
+
+client = InfluxDBClient('localhost', 8086, 'root', 'root', 'SYSTEMMONITOR')
+client.write_points(json_body)
+print("uploaded")
