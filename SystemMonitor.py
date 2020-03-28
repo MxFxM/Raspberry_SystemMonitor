@@ -1,5 +1,9 @@
 import psutil
 from influxdb import InfluxDBClient
+import time
+
+# wait before reading cpu load
+time.sleep(10)
 
 # cpu
 cpu_load = psutil.cpu_percent()
