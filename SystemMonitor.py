@@ -1,6 +1,7 @@
 import psutil
 from influxdb import InfluxDBClient
 import time
+import os
 
 # wait before reading cpu load
 time.sleep(10)
@@ -18,6 +19,10 @@ mem_total = round(psutil.virtual_memory().total / 1024.0 / 1024.0, 1)
 dsk_free = round(psutil.disk_usage('/').free / 1024.0 / 1024.0 / 1024.0, 1)
 dsk_total = round(psutil.disk_usage('/').free / 1024.0 / 1024.0 / 1024.0, 1)
 
+# cpu temperature
+temp_string = os.popen("vcgencmd measure_temp").readline()
+cpu_temp = temp_string.replace("temp=","").replace("'C\n","")
+
 # print to screen
 #print("CPU load: " + str(cpu_load) + "%")
 #print("Memory: " + str(mem_free) + "Mb / " + str(mem_total) + "Mb")
@@ -26,6 +31,7 @@ dsk_total = round(psutil.disk_usage('/').free / 1024.0 / 1024.0 / 1024.0, 1)
 json_body = [{"measurement": "system",
               "fields": {
                   "cpu_load": cpu_load,
+                  "cpu_temp": cpu_temp,
                   "mem_total": mem_total,
                   "mem_free": mem_free,
                   "mem_used": (mem_total - mem_free),
