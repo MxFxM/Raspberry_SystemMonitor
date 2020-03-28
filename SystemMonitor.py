@@ -19,9 +19,9 @@ dsk_free = round(psutil.disk_usage('/').free / 1024.0 / 1024.0 / 1024.0, 1)
 dsk_total = round(psutil.disk_usage('/').free / 1024.0 / 1024.0 / 1024.0, 1)
 
 # print to screen
-print("CPU load: " + str(cpu_load) + "%")
-print("Memory: " + str(mem_free) + "Mb / " + str(mem_total) + "Mb")
-print("Disk: " + str(dsk_free) + "Gb / " + str(dsk_total) + "Gb")
+#print("CPU load: " + str(cpu_load) + "%")
+#print("Memory: " + str(mem_free) + "Mb / " + str(mem_total) + "Mb")
+#print("Disk: " + str(dsk_free) + "Gb / " + str(dsk_total) + "Gb")
 
 json_body = [{"measurement": "system",
               "fields": {
@@ -37,4 +37,4 @@ json_body = [{"measurement": "system",
 
 client = InfluxDBClient('localhost', 8086, 'root', 'root', 'SYSTEMMONITOR')
 client.write_points(json_body)
-print("uploaded")
+#print("uploaded")
